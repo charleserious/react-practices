@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Finding a DOM node</title>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<!-- Accessing createClass via the main React package is been removed in React v16.0, We use 15.6.2 instead -->
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.2/react.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.6.2/react-dom.js"></script>
+<script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+    let MyComponent = React.createClass({
+        handleClick: function() {
+            console.log( this.refs.myTextInput );
+            this.refs.myTextInput.focus();
+        },
+
+        render: function() {
+            return (
+                <div>
+                    <input type="text" ref="myTextInput" />
+                    <input type="button" value="Focus the text input" onClick={this.handleClick} />
+                </div>
+            );
+        }
+    });
+
+    ReactDOM.render(
+        <MyComponent />,
+        document.getElementById( 'example' )
+    );
+</script>
+</html>
