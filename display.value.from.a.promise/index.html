@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Display value from a Promise</title>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/babel">
+    class Repositories extends React.Component {
+        constructor( props ) {
+            super( props );
+
+            this.state = {
+
+                loading: true,
+                error: null,
+                data: null
+
+            };
+        }
+
+        componentDidMount() {
+            
+            this.props.promise.then(
+                value => this.setState( { loading: false, data: value } ),
+                error => this.setState( { loading: false, error: error } )
+            );
+        }
+        
+        render() {
+            if ( this.state.loading ) {
+                return <span>loading...</span>;
+            } else if ( this.state.error != null ) {
+                return <span>Error: {this.state.error.message}</span>;
+            } else {
+                let repos = this.state.data.items;
+                let reposList = repos.map(function ( repo ) {
+                    return (
+                        <li key={repo.id}>
+                            <a href={repo.html_url}>{repo.name}</a> ({repo.stargazers_count} stars) <br/> {repo.description}
+                        </li>
+                    )
+                })
+                return (
+                    <main>
+                        <h1>Most Popular JavaScript Projects in Github</h1>
+                        <ol>
+                            {reposList}
+                        </ol>
+                    </main>
+                );
+            }
+        }
+    }
+
+    ReactDOM.render(
+        <Repositories promise={$.getJSON('https://api.github.com/search/repositories?q=javascript&sort=stars')} />,
+        document.getElementById( 'example' )
+    );
+</script>
+</html>
