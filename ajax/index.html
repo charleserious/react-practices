@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Component LifeCycle</title>
+    <title>Ajax</title>
 </head>
 <body>
     <div id="example"></div>
@@ -12,38 +12,40 @@
 <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
 <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/babel">
-    class Hello extends React.Component {
+    class UserGist extends React.Component {
         constructor( props ) {
             super( props );
-            this.state = { opacity: 1.0 };
+            this.state = { 
+                username: '',
+                lastGistUrl: ''
+            };
         }
 
         componentDidMount() {
 
-            this.timer = setInterval( function (params) {
-                var opacity = this.state.opacity;
-                opacity -= 0.45;
-                if( opacity < 0.1 ) {
-                    opacity = 1.0;
-                }
-
-                this.setState( { opacity: opacity } );
-            }.bind( this ), 100 );
-            
+            $.get( this.props.source, function ( result ) {
+                
+                let lastGist = result[0];
+                this.setState( {
+                    username: lastGist.owner.login,
+                    lastGistUrl: lastGist.html_url
+                } );
+            }.bind( this ) );
         }
 
         render() {
             return (
-                <div style={{opacity: this.state.opacity}}>
-                    Hello {this.props.name}
+                <div>
+                    {this.state.username}'s last gis is <a href={this.state.lastGistUrl}>here</a>
                 </div>
             );
         }
     }
 
     ReactDOM.render(
-        <Hello name="Charles" />,
+        <UserGist source="https://api.github.com/users/octocat/gists" />,
         document.getElementById( 'example' )
     );
 </script>
