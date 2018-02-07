@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Component LifeCycle</title>
+</head>
+<body>
+    <div id="example"></div>
+</body>
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+    class Hello extends React.Component {
+        constructor( props ) {
+            super( props );
+            this.state = { opacity: 1.0 };
+        }
+
+        componentDidMount() {
+
+            this.timer = setInterval( function (params) {
+                var opacity = this.state.opacity;
+                opacity -= 0.45;
+                if( opacity < 0.1 ) {
+                    opacity = 1.0;
+                }
+
+                this.setState( { opacity: opacity } );
+            }.bind( this ), 100 );
+        }
+
+        render() {
+            return (
+                <div style={{opacity: this.state.opacity}}>
+                    Hello {this.props.name}
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <Hello name="Charles" />,
+        document.getElementById( 'example' )
+    );
+</script>
+</html>
