@@ -4,7 +4,6 @@
   "description": "react.js in server side render practice",
   "main": "server.js",
   "scripts": {
-    "build": "babel -d . src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Charleserious",
